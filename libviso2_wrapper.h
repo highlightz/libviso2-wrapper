@@ -1,4 +1,5 @@
 // To use this wrapper class, put all libviso2 .h and .cpp files in directory 'libviso2'.
+// Refer to 'http://www.cvlibs.net/software/libviso/'
 
 #ifndef LIBVISO2_WRAPPER_H
 #define LIBVISO2_WRAPPER_H
