@@ -193,8 +193,8 @@ int main( )
 #define S2C38
 #define HIGH_DEF
 
-// To be replaced when log_wrapper is integrated
-std::ofstream anotherFile( "offline_odom_xzy.txt" );
+#include "log_wrapper.h"
+log_wrapper< odometry > dataLogger( "D:\\HighlightClark\\dog_data\\", static_cast< std::string >( "offline_odom.txt" ) );
 
 int main( int argc, char** argv )
 {
@@ -281,16 +281,11 @@ int main( int argc, char** argv )
 		odometry anOdom = libviso2.getOdometry(  );
 
 		Matrix aPose = libviso2.getPose( );
-		double Rot[9] = {aPose.val[0][0], aPose.val[0][1], aPose.val[0][2],
-				 aPose.val[1][0], aPose.val[1][1], aPose.val[1][2],
-				 aPose.val[2][0], aPose.val[2][1], aPose.val[2][2]};
+		
+		std::cout << aPose << std::endl << std::endl;
 
-		anotherFile << i << " " 
-			         << anOdom.x << " " << anOdom.y << " " << anOdom.z << " "
-			         << Rot[0] << " " << Rot[1] << " " << Rot[2] << " "
-				 << Rot[3] << " " << Rot[4] << " " << Rot[5] << " "
-				 << Rot[6] << " " << Rot[7] << " " << Rot[8] << " "
-				 << std::endl;
+		// Start the odometry logger
+		dataLogger.start_log_odom( anOdom );
 	}
 	return 0;
 }
