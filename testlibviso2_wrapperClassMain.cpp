@@ -188,10 +188,10 @@ int main( )
 #include "libviso2_wrapper.h"
 
 #define DEMO_KITTI
-//#define DEMO_DOGDATA
 
+//#define DEMO_DOGDATA
 #define S2C38
-#define HIGHER
+#define HIGH_DEF
 
 // To be replaced when log_wrapper is integrated
 std::ofstream anotherFile( "offline_odom_xzy.txt" );
@@ -200,16 +200,17 @@ int main( int argc, char** argv )
 {
 	// Sequence directory
 #ifdef DEMO_KITTI
-	std::string dir = "D:\\Highlight Clark\\2010_03_09_drive_0019";
+	std::string dir = "D:\\HighlightClark\\2010_03_09_drive_0019";
 #endif
 
 #ifdef DEMO_DOGDATA
-	std::string dir = "D:\\Highlight Clark\\dog_data";
+	std::string dir = "D:\\HighlightClark\\dog_data";
 #endif
 
 	// Set most important visual odometry parameters
 	// for a full parameter list, look at: viso_stereo.h
 	VisualOdometryStereo::parameters param;
+	
 #ifdef DEMO_KITTI
 	// calibration parameters for sequence 2010_03_09_drive_0019 
 	param.calib.f  = 645.24;  // Focal length in pixels
@@ -220,7 +221,7 @@ int main( int argc, char** argv )
 
 #ifdef DEMO_DOGDATA
 	#ifdef S2C38
-		#ifdef HIGHER
+		#ifdef HIGH_DEF
 			double f  = 786.66; 
 			double cu = 515.40; 
 			double cv = 393.52; 
@@ -232,7 +233,7 @@ int main( int argc, char** argv )
 			double parambase = 0.12;
 		#endif
 	#else  // S2C25
-		#ifdef HIGHER
+		#ifdef HIGH_DEF
 			double f  = 445.90; 
 			double cu = 507.51; 
 			double cv = 395.32; 
@@ -281,15 +282,15 @@ int main( int argc, char** argv )
 
 		Matrix aPose = libviso2.getPose( );
 		double Rot[9] = {aPose.val[0][0], aPose.val[0][1], aPose.val[0][2],
-						 aPose.val[1][0], aPose.val[1][1], aPose.val[1][2],
-						 aPose.val[2][0], aPose.val[2][1], aPose.val[2][2]};
+				 aPose.val[1][0], aPose.val[1][1], aPose.val[1][2],
+				 aPose.val[2][0], aPose.val[2][1], aPose.val[2][2]};
 
 		anotherFile << i << " " 
-			          << anOdom.x << " " << anOdom.y << " " << anOdom.z << " "
-			          << Rot[0] << " " << Rot[1] << " " << Rot[2] << " "
-					      << Rot[3] << " " << Rot[4] << " " << Rot[5] << " "
-					      << Rot[6] << " " << Rot[7] << " " << Rot[8] << " "
-					      << std::endl;
+			         << anOdom.x << " " << anOdom.y << " " << anOdom.z << " "
+			         << Rot[0] << " " << Rot[1] << " " << Rot[2] << " "
+				 << Rot[3] << " " << Rot[4] << " " << Rot[5] << " "
+				 << Rot[6] << " " << Rot[7] << " " << Rot[8] << " "
+				 << std::endl;
 	}
 	return 0;
 }
