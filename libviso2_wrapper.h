@@ -91,6 +91,10 @@ public:
 	// Return the [R, t] matrix to class user 
 	Matrix getPose ( ) const;
 	
+	double computeDurationDistance( ) const;
+	
+	void reinitializePose( );	
+	
 	void drawOdometryCurve( cv::Mat& bkground );
 private:
 	// Set most important visual odometry parameters,
@@ -106,7 +110,7 @@ private:
 	double inliers;
 
 	odometry odom;
-
+	
 private:
 	void rotmat_to_euler( double R[9], double ola[3] );  // To be validated
 };
