@@ -90,6 +90,8 @@ public:
 
 	// Return the [R, t] matrix to class user 
 	Matrix getPose ( ) const;
+	
+	void drawOdometryCurve( cv::Mat& bkground );
 private:
 	// Set most important visual odometry parameters,
 	// for a full parameter list, look at: viso_stereo.h
