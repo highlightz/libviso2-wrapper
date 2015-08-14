@@ -43,6 +43,9 @@ IplImage* pfR = cvCreateImage( cvSize( WIDTH, HEIGHT ), 8, 3 );
 IplImage* pGrayL = cvCreateImage( cvSize( WIDTH, HEIGHT ), 8, 1 );
 IplImage* pGrayR = cvCreateImage( cvSize( WIDTH, HEIGHT ), 8, 1 );
 
+// Draw odometry curve on this image
+cv::Mat odomCurve( 480, 320, CV_8UC3 );
+
 // Note: struct odometry is defined in file 'libviso2_wrapper.h'
 log_wrapper< odometry > dataLogger( "D:\\HighlightClark\\dog_data\\" );
 
@@ -158,6 +161,9 @@ int main( )
 		
 		// Start the odometry logger
 		dataLogger.start_log_odom( anOdom );
+		
+		libviso2.drawOdometryCurve( odomCurve );
+		cv::imshow( "Odometry", odomCurve );
 
 		// Update the logger counter
 		img_counter++;
