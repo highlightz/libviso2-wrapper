@@ -165,8 +165,8 @@ int main( )
 		libviso2.drawOdometryCurve( odomCurve );
 		cv::imshow( "Odometry", odomCurve );
 
-		const double REINITIALIZE_THRESHOLD = 5.0;
-		if ( abs( libviso2.computeDurationDistance( ) - REINITIALIZE_THRESHOLD ) < 0.01 )
+		const double REINITIALIZE_THRESHOLD = 15.0;
+		if ( libviso2.computeDurationDistance( ) > REINITIALIZE_THRESHOLD )
 		{
 			libviso2.reinitializePose( );
 		}
