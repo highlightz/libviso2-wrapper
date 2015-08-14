@@ -147,24 +147,24 @@ void libviso2_wrapper::rotmat_to_euler( double R[9], double ola[3] )
 
 void libviso2_wrapper::drawOdometryCurve( cv::Mat& bkground )
 {
-	const int WIDTH = 480;
-    	const int HEIGHT = 320;    
+	const int WIDTH = 640;
+    	const int HEIGHT = 480;    
     	bkground.create( cv::Size( WIDTH, HEIGHT ), CV_8UC3 );
 	
 	// This parameter is used for adjusting the curve's scale
-    	const double adjustableScale = 1.0;
+    	const double adjustableScale = 5.0;
 	
     	// Draw axis
     	// Horizontal axis
     	cv::line( bkground,
-	          cv::Point( 10, bkground.rows * 3 / 4 ),
-	          cv::Point( bkground.cols - 10, bkground.rows * 3 / 4 ),
+	          cv::Point( 10, bkground.rows / 2 ),
+	          cv::Point( bkground.cols - 10, bkground.rows / 2 ),
 	          cv::Scalar( 0, 255, 0 ), 2 );
 	
 	// Vertical axis
     	cv::line( bkground,
 	          cv::Point( bkground.cols / 2, 10 ),
-	          cv::Point( bkground.cols / 2, bkground.rows * 3 / 4 ),
+	          cv::Point( bkground.cols / 2, bkground.rows / 2 ),
 	          cv::Scalar( 0, 255, 0 ), 2 );
 	          
 	// Prepare data: coordinate transformation for convenient display
@@ -172,7 +172,7 @@ void libviso2_wrapper::drawOdometryCurve( cv::Mat& bkground )
 	double y_display = odom.z;
 	
 	x_display = x_display * scale + bkground.cols / 2;
-        y_display = -y_display * scale + bkground.rows * 3 / 4;
+        y_display = -y_display * scale + bkground.rows / 2;
 	          
     	cv::circle( bkground, cv::Point( x_display, y_display ), 1, cv::Scalar( 0, 0, 255 ) );
 }
