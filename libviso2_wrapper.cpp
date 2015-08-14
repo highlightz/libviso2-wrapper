@@ -171,7 +171,7 @@ void libviso2_wrapper::drawOdometryCurve( cv::Mat& bkground )
 	double x_display = odom.x;
 	double y_display = odom.z;
 	
-	x_display = -x_display * scale + bkground.cols / 2;
+	x_display = x_display * scale + bkground.cols / 2;
         y_display = -y_display * scale + bkground.rows * 3 / 4;
 	          
     	cv::circle( bkground, cv::Point( x_display, y_display ), 1, cv::Scalar( 0, 0, 255 ) );
