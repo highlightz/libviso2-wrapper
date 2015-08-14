@@ -1,5 +1,7 @@
 #include "libviso2_wrapper.h"
 
+#include <math.h>
+
 libviso2_wrapper::libviso2_wrapper( VisualOdometryStereo::parameters aParam ) : m_viso ( aParam ), param( aParam ) 
 {
 	pose = Matrix::eye(4);
@@ -175,4 +177,21 @@ void libviso2_wrapper::drawOdometryCurve( cv::Mat& bkground )
         y_display = -y_display * scale + bkground.rows / 2;
 	          
     	cv::circle( bkground, cv::Point( x_display, y_display ), 1, cv::Scalar( 0, 0, 255 ) );
+}
+
+double libviso2_wrapper::computeDurationDistance( ) const
+{
+	return sqrt( odom.x * odom.x 
+	           + odom.y * odom.y
+	           + odom.z * odom.z );
+}
+
+void libviso2_wrapper::reinitializePose( )
+{
+	pose = Matrix::eye(4);
+
+	odom.x = 0;
+	odom.z = 0;
+	odom.y = 0;
+	odom.yaw_rad = 0;
 }
