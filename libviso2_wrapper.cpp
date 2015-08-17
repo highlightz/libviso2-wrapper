@@ -186,6 +186,12 @@ double libviso2_wrapper::computeDurationDistance( ) const
 	           + odom.z * odom.z );
 }
 
+double libviso2_wrapper::distanceToWaypoint( const double x, const double y )
+{
+	return sqrt( ( odom.x - ( -y ) ) * ( odom.x - ( -y ) ) 
+	           + ( odom.z - x ) * ( odom.z - x ) );
+}
+
 void libviso2_wrapper::reinitializePose( )
 {
 	pose = Matrix::eye(4);
