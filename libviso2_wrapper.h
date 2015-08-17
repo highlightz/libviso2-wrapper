@@ -93,6 +93,8 @@ public:
 	
 	double computeDurationDistance( ) const;
 	
+	double distanceToWaypoint( const double x, const double y );
+	
 	void reinitializePose( );	
 	
 	void drawOdometryCurve( cv::Mat& bkground );
