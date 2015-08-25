@@ -179,6 +179,41 @@ void libviso2_wrapper::drawOdometryCurve( cv::Mat& bkground )
     	cv::circle( bkground, cv::Point( x_display, y_display ), 1, cv::Scalar( 0, 0, 255 ) );
 }
 
+void libviso2_wrapper::drawCurrentHeading( cv::Mat& bkground )
+{
+	const int WIDTH = 640;
+    	const int HEIGHT = 480;    
+    	bkground.create( cv::Size( WIDTH, HEIGHT ), CV_8UC3 );
+	
+	// This parameter is used for adjusting the curve's scale
+    	const double adjustableScale = 50.0;
+	
+    	// Draw axis
+    	// Horizontal axis
+    	cv::line( bkground,
+	          cv::Point( 10, bkground.rows / 2 ),
+	          cv::Point( bkground.cols - 10, bkground.rows / 2 ),
+	          cv::Scalar( 0, 255, 0 ), 2 );
+	
+	// Vertical axis
+    	cv::line( bkground,
+	          cv::Point( bkground.cols / 2, 10 ),
+	          cv::Point( bkground.cols / 2, bkground.rows / 2 ),
+	          cv::Scalar( 0, 255, 0 ), 2 );
+	          
+	// Prepare data: coordinate transformation for convenient display
+	double x_display = cos( odom.yaw_rad ) * adjustableScale;
+	double y_display = sin( odom.yaw_rad ) * adjustableScale;
+	
+	x_display = x_display + bkground.cols / 2;
+        y_display = -y_display + bkground.rows / 2;
+
+	cv::line( bkground, 
+	          cv::Point( x_display, y_display ), 
+	          cv::Point( bkground.cols / 2, bkground.rows - 10 ), 
+	          cv::Scalar( 255, 0, 0 ), 2 );
+}
+
 double libviso2_wrapper::computeDurationDistance( ) const
 {
 	return sqrt( odom.x * odom.x 
