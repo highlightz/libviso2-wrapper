@@ -98,6 +98,8 @@ public:
 	void reinitializePose( );	
 	
 	void drawOdometryCurve( cv::Mat& bkground );
+	
+	void drawCurrentHeading( cv::Mat& bkground );
 private:
 	// Set most important visual odometry parameters,
 	// for a full parameter list, look at: viso_stereo.h
