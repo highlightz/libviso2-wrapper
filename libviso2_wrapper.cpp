@@ -1,5 +1,7 @@
 #include "libviso2_wrapper.h"
 
+#include <sstream>
+using std::stringstream;
 #include <math.h>
 
 libviso2_wrapper::libviso2_wrapper( VisualOdometryStereo::parameters aParam ) : m_viso ( aParam ), param( aParam ) 
@@ -187,6 +189,7 @@ void libviso2_wrapper::drawCurrentHeading( cv::Mat& bkground )
 	
 	// This parameter is used for adjusting the curve's scale
     	const double adjustableScale = 80.0;
+    	const double rad_to_deg = 180 / 3.14;
 	
     	// Draw axis
     	// Horizontal axis
@@ -216,6 +219,17 @@ void libviso2_wrapper::drawCurrentHeading( cv::Mat& bkground )
 	          cv::Point( x_display, y_display ), 
 	          cv::Point( bkground.cols / 2, bkground.rows - 10 ), 
 	          cv::Scalar( 255, 0, 0 ), 4 );
+	          
+	cv::circle( bkgroud,
+	            cv::Point( x_display, y_display ),
+	            6, 
+	            cv::Scalar( 255, 255, 0 ),
+	            4 );
+	
+	// Show the cumulated yaw (in degrees)
+	stringstream ss;
+	ss << odom.yaw_rad * rad_to_deg;
+	// TODO: line214
 }
 
 double libviso2_wrapper::computeDurationDistance( ) const
