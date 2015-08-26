@@ -229,7 +229,25 @@ void libviso2_wrapper::drawCurrentHeading( cv::Mat& bkground )
 	// Show the cumulated yaw (in degrees)
 	stringstream ss;
 	ss << odom.yaw_rad * rad_to_deg;
-	// TODO: line214
+	string yaw_reading_text;
+	ss >> yaw_reading_text;
+	int fontFace = cv::FONT_HERSHEY_SCRIPT_SIMPLEX;
+	double fontScale = 2;
+	int thickness = 3;
+	cv::Point textOrg( 50, 70 );
+	cv::putText( bkground, 
+	             yaw_reading_text,
+	             textOrg,
+	             fontFace,
+	             fontScale,
+	             cv::Scalar::all( 255 ),
+	             thickness, 8 );
+	             
+	cv::circle( bkground,
+	            cv::Point( 190, 30 ),
+	            6, 
+	            cv::Scalar::all( 255 ),
+	            2 );
 }
 
 double libviso2_wrapper::computeDurationDistance( ) const
