@@ -48,12 +48,13 @@ void libviso2_wrapper::run( iplImageWrapper& left_img, iplImageWrapper& right_im
 		odom.z = pose.val[2][3];
 
 		double Rot[9] = {pose.val[0][0], pose.val[0][1], pose.val[0][2],
-						 pose.val[1][0], pose.val[1][1], pose.val[1][2],
-						 pose.val[2][0], pose.val[2][1], pose.val[2][2]};
+				 pose.val[1][0], pose.val[1][1], pose.val[1][2],
+				 pose.val[2][0], pose.val[2][1], pose.val[2][2]};
 
 		double euler[3] = {0, 0, 0};
 		rotmat_to_euler( Rot, euler );
-		odom.yaw_rad = euler[0];
+		//odom.yaw_rad = euler[0];
+		odom.yaw_rad = getYaw( );
 	}
 
 	// Release uint8_t buffers
@@ -208,12 +209,14 @@ void libviso2_wrapper::drawCurrentHeading( cv::Mat& bkground )
 	double x_display = cos( odom.yaw_rad ) * adjustableScale;
 	double y_display = sin( odom.yaw_rad ) * adjustableScale;
 	
+	/*
 	double tmp = x_display;
 	x_display = y_display;
 	y_display = tmp;
+	*/
 	
-	x_display = -x_display + bkground.cols / 2;
-        y_display = -y_display + bkground.rows / 2;
+	x_display = x_display + bkground.cols / 2;
+        y_display = y_display + bkground.rows / 2;
 
 	cv::line( bkground, 
 	          cv::Point( x_display, y_display ), 
@@ -242,12 +245,6 @@ void libviso2_wrapper::drawCurrentHeading( cv::Mat& bkground )
 	             fontScale,
 	             cv::Scalar::all( 255 ),
 	             thickness, 8 );
-	             
-	cv::circle( bkground,
-	            cv::Point( 190, 30 ),
-	            6, 
-	            cv::Scalar::all( 255 ),
-	            2 );
 }
 
 double libviso2_wrapper::computeDurationDistance( ) const
