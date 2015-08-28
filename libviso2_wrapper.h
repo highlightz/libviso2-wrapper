@@ -91,6 +91,9 @@ public:
 	// Return the [R, t] matrix to class user 
 	Matrix getPose ( ) const;
 	
+	// Returns yaw
+	double getYaw( );
+	
 	double computeDurationDistance( ) const;
 	
 	double distanceToWaypoint( const double x, const double y );
