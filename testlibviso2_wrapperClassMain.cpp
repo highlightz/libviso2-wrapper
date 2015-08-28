@@ -164,12 +164,18 @@ int main( )
 		
 		libviso2.drawOdometryCurve( odomCurve );
 		cv::imshow( "Odometry", odomCurve );
+		
+		libviso2.drawCurrentHeading( yawDirection );
+		cv::imshow( "Yaw", yawDirection );
+		yawDirection.setTo( cv::Scalar( 0 ) );
 
+#if 0
 		const double REINITIALIZE_THRESHOLD = 15.0;
 		if ( libviso2.computeDurationDistance( ) > REINITIALIZE_THRESHOLD )
 		{
 			libviso2.reinitializePose( );
 		}
+#endif		
 
 		// Update the logger counter
 		img_counter++;
