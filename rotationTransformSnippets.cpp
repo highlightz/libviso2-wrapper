@@ -9,7 +9,7 @@ namespace RotationTransform
   // Refer to quat2euler.m in Matlab
   // The rotating order param is 'xyz'
   void threeAxisRot( double r11, double r12, double r21, double r31, double r32,
-		                 double& r1, double& r2, double& r3 )
+		     double& r1, double& r2, double& r3 )
   {
 	  r1 = atan2( r11, r12 );
 	  r2 = asin( r21 );
