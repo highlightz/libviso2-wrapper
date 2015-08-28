@@ -269,3 +269,17 @@ void libviso2_wrapper::reinitializePose( )
 	odom.y = 0;
 	odom.yaw_rad = 0;
 }
+
+// Returns yaw
+double libviso2_wrapper::getYaw( )
+{
+	// Conversion from rotation matrix to quaternion
+	double qw = 0.5 * sqrt( 1 + pose.val[0][0] + pose.val[1][1] + pose.val[2][2] );
+	double qx = ( pose.val[2][1] - pose.val[1][2] ) / 4 / qw;
+	double qy = ( pose.val[0][2] - pose.val[2][0] ) / 4 / qw;
+	double qz = ( pose.val[1][0] - pose.val[0][1] ) / 4 / qw;
+
+	double yaw = atan2( qy, qw ) * 2;
+
+	return yaw;
+}
