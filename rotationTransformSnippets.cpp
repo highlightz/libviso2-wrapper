@@ -28,21 +28,20 @@ namespace RotationTransform
 	  // Only to validate that the mapping between quaternion and rotation matrix is one-to-one.
 	  Eigen::Matrix3d rot_mat_from_quaternion;
 	  rot_mat_from_quaternion << 1 - 2 * qy * qy - 2 * qz * qz, 2 * ( qx * qy - qz * qw ), 2 * ( qx * qz + qy * qw ),
-		                           2 * ( qx * qy + qz * qw ), 1 - 2 * qx * qx - 2 * qz * qz, 2 * ( qy * qz - qx * qw ),
-								               2 * ( qx * qz - qy * qw ), 2 * ( qy * qz + qx * qw ), 1 - 2 * qx * qx - 2 * qy * qy;
+		                     2 * ( qx * qy + qz * qw ), 1 - 2 * qx * qx - 2 * qz * qz, 2 * ( qy * qz - qx * qw ),
+				     2 * ( qx * qz - qy * qw ), 2 * ( qy * qz + qx * qw ), 1 - 2 * qx * qx - 2 * qy * qy;
     
-    // Display them if you want to.
-    //std::cout << "Raw pose: " << std::endl << pose << std::endl;
-    //std::cout << "From quaternion: " << std::endl << rot_mat_from_quaternion << std::endl;								               
+    	// Display them if you want to.
+    	//std::cout << "Raw pose: " << std::endl << pose << std::endl;
+    	//std::cout << "From quaternion: " << std::endl << rot_mat_from_quaternion << std::endl;								               
 	  
-	  // Prepare data for function threeAxisRot
-	  double r11 = -2 * ( qy * qz + qw * qx );
-	  double r12 = qw * qw - qx * qx - qy * qy + qz * qz;
-	  double r21 = 2 * ( qx * qz + qw * qy );
-	  double r31 = -2 * ( qx * qy - qw * qz );
-	  double r32 = qw * qw + qx * qx - qy * qy - qz * qz;
+	// Prepare data for function threeAxisRot
+	double r11 = -2 * ( qy * qz + qw * qx );
+	double r12 = qw * qw - qx * qx - qy * qy + qz * qz;
+	double r21 = 2 * ( qx * qz + qw * qy );
+	double r31 = -2 * ( qx * qy - qw * qz );
+	double r32 = qw * qw + qx * qx - qy * qy - qz * qz;
 	  
-	  threeAxisRot( r11, r12, r21, r31, r32, eu1, eu2, eu3 );
-	  
+	threeAxisRot( r11, r12, r21, r31, r32, eu1, eu2, eu3 );
   }
 }
