@@ -4,79 +4,25 @@
 #ifndef LIBVISO2_WRAPPER_H
 #define LIBVISO2_WRAPPER_H
 
-// libviso2 Includes
-#include "libviso2/viso_stereo.h"
-
 // System Includes
 #include <string>
 
+#include <vector>
+using std::vector;
+
 // OpenCV Includes
-#include <opencv/cxcore.h>
-#include <opencv/highgui.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
 
-class iplImageWrapper
-{
-public:	    
-	iplImageWrapper( IplImage* RetfImgGrey )
-	{  
-		pic = cvCreateImage( cvSize( RetfImgGrey->width, RetfImgGrey->height ), RetfImgGrey->depth, RetfImgGrey->nChannels );
-		cvCopy( RetfImgGrey, pic );
-		width = pic->width;
-		height = pic->height;
-    }
+#include "structures.h"
 
-	// For offline demo
-	iplImageWrapper( std::string image_name )
-	{
-		const char* name = image_name.c_str( );
-		pic = cvLoadImage( name, 0 );
-		width = pic->width;
-		height = pic->height;
-	}
-
-	~iplImageWrapper( )
-	{
-		if ( pic )
-		{
-			cvReleaseImage( &pic );
-		}
-	}
-
-	int32_t get_width( )
-	{
-		return width;
-	}
-
-	int32_t get_height( )
-	{
-		return height;
-	}
-
-	uint8_t get_pixel( int32_t u, int32_t v )
-	{
-		return pic->imageData[ v * pic->widthStep + u ];
-	}
-
-public:
-	int32_t width;
-	int32_t height;
-	
-	IplImage* pic;
-};
-
-// This struct stores the necessary pose information of a gound vehicle.
-struct odometry
-{
-	double x;  // axis of which points to the right
-	double y;  // axis of which points to the earth
-	double z;  // axis of which points to the front
-
-	double yaw_rad;  // around y axis, positive when turning right horizontally
-};
+// libviso2 Includes
+#include "viso_stereo.h"
 
 class libviso2_wrapper
 {
 public:
+	// Construction
 	libviso2_wrapper( VisualOdometryStereo::parameters aParam );
 	
 	// The principal driver for running libviso2
@@ -84,25 +30,20 @@ public:
 	
 	// For displaying odometry computating statistics
 	double getInliers( ) const;
-	
-	// Return the x, y, z, yaw info to class user
-	odometry getOdometry( ) const;
 
-	// Return the [R, t] matrix to class user 
+	// Return the [R, t] matrix
 	Matrix getPose ( ) const;
-	
-	// Returns yaw
-	double getYaw( );
-	
-	double computeDurationDistance( ) const;
-	
-	double distanceToWaypoint( const double x, const double y );
-	
-	void reinitializePose( );	
-	
-	void drawOdometryCurve( cv::Mat& bkground );
+
+	// Return yaw to class user
+	double yaw( );
+
+	// @adjustableScale is used for adjusting the curve's scale
+	// when running on a large-scale area, this param should be set small.
+	void drawOdometryCurve( cv::Mat& bkground, double adjustableScale = 1.5, int gridSize = 16 );
 	
 	void drawCurrentHeading( cv::Mat& bkground );
+
+	void cumulatePose( Matrix& cp, double& ca );
 private:
 	// Set most important visual odometry parameters,
 	// for a full parameter list, look at: viso_stereo.h
@@ -114,10 +55,34 @@ private:
 	// frame's camera coordinates to the first frame's camera coordinates)
 	Matrix pose;
 
+	// Used to compute euler angles
+	void threeAxisRot( double r11, double r12, double r21, double r31, double r32,
+		               double& r1, double& r2, double& r3 );
+
 	double inliers;
 
-	odometry odom;
-	
+	// This struct stores the odom info of a node,
+	// where reinitialization happens.
+	struct HistoryOdom
+	{
+		double hX;
+		double hY;
+		double hZ;
+
+		double hYaw;
+
+		Matrix hPose;
+	};
+	// A series of odom info nodes
+	vector< HistoryOdom > historyOdoms;	
+
+	// Whenever an angle limit is reached, reinitialize the pose
+	void reinitializePose( );	
+private:
+	// 用于在里程曲线画布上绘制规则的网格，以标定里程值和图像像素距离的关系
+	// 参数：
+	// @gridSize 设定网格单元的尺寸，默认值是16
+	void drawGrid( cv::Mat& bkground, int gridSize = 16 );
 private:
 	void rotmat_to_euler( double R[9], double ola[3] );  // To be validated
 };
